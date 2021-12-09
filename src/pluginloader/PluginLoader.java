@@ -15,7 +15,7 @@ public class PluginLoader {
 	
 	public static Object getLoader(Class <?> interf) {
 		
-		Map<Class<?>, Object> pluginMap = new HashMap<>();
+		Map<String, Object> pluginMap = new HashMap<>();
 		Map<String, String> configMap =  new HashMap<>();
 		
 		Properties prop = new Properties();
@@ -31,7 +31,7 @@ public class PluginLoader {
 		});
 		
 		
-		Object result = pluginMap.get(interf);
+		Object result = pluginMap.get(interf.getName());
 		if(result != null) {
 			return result;
 		}
@@ -59,7 +59,7 @@ public class PluginLoader {
 			e.printStackTrace();
 		}
 		
-		pluginMap.put(interf, result);
+		pluginMap.put(interf.getName(), result);
 		return result;
 		
 		/*
