@@ -1,0 +1,4 @@
+name=Afficheur
+classe = tiers.Afficheur
+description = plugin d'affichage des donnees
+autorun = true
