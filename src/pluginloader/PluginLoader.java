@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import IHM.UIContainer;
+
 public class PluginLoader {
 
 	private HashMap<String, Plugin> plugins;	
@@ -109,6 +111,7 @@ public class PluginLoader {
 	public static void main(String[] args) {
 		PluginLoader pluginLoader = PluginLoader.getInstance();
 		pluginLoader.parsePlugins();
+		// new UIContainer().setVisible(true);
 		pluginLoader.autoRun();
 	}
 }	
