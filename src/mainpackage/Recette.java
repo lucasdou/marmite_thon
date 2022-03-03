@@ -1,12 +1,13 @@
 package mainpackage;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Recette {
 
 	String nom;
-	HashMap<Ingredient, Integer> ingredients;
-	public Recette(String nom, HashMap<Ingredient, Integer> ingredients) {
+	List<Ingredient> ingredients;
+	public Recette(String nom, List<Ingredient> ingredients) {
 		super();
 		this.nom = nom;
 		this.ingredients = ingredients;
@@ -17,10 +18,10 @@ public class Recette {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-	public HashMap<Ingredient, Integer> getIngredients() {
+	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}
-	public void setIngredients(HashMap<Ingredient, Integer> ingredients) {
+	public void setIngredients(List<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
 	

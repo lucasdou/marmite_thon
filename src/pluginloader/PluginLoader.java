@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-import IHM.UIContainer;
 
 public class PluginLoader {
 
@@ -24,6 +23,16 @@ public class PluginLoader {
 	
 	public HashMap<String, Plugin> getPlugins () {
 		return this.plugins;
+	}
+	
+	public static HashMap<String, Plugin> getPluginsNoAutoRun () {
+		HashMap<String, Plugin> plugins =  new HashMap<String, Plugin>();
+		for(Plugin p : PluginLoader.getInstance().getPlugins().values()) {
+			if(p.getAutoRun().contentEquals("false")) {
+				plugins.put(p.getName(), p);
+			}
+		}
+		return plugins;
 	}
 	
 	/**
@@ -67,6 +76,7 @@ public class PluginLoader {
 		}
 	}
 	
+
 	/**
 	 * Méthode pour charger les plugins 
 	 * 
@@ -111,7 +121,6 @@ public class PluginLoader {
 	public static void main(String[] args) {
 		PluginLoader pluginLoader = PluginLoader.getInstance();
 		pluginLoader.parsePlugins();
-		// new UIContainer().setVisible(true);
 		pluginLoader.autoRun();
 	}
 }	
