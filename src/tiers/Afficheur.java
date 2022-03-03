@@ -14,11 +14,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import IHM.ItemDetails;
 
 import interfaces.IAfficheur;
 import interfaces.IMakeItVegan;
+import mainpackage.Ingredient;
 import mainpackage.Recette;
 import pluginloader.Plugin;
 import pluginloader.PluginLoader;
@@ -34,6 +36,9 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	JPanel leftPanel;
 	JPanel rightPanel;
 	JPanel buttonPluginListPanel;
+	JPanel ingredientPanel;
+	
+	Recette recetteDetaillee;
 
 	@Override
 	public void run() {
@@ -74,7 +79,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 						Thread t = new Thread ((Runnable) PluginLoader.loadPlugin(plugin));
 						t.start();
 						mainContainer.repaint();
-						JButtonPlugInList.get(plugin.getName()).setBackground(Color.GREEN);//set à activé		
+						JButtonPlugInList.get(plugin.getName()).setBackground(Color.GREEN);//set à activé
 					}
 				});
 				JButtonPlugInList.put(plugin.getName(), button);
@@ -95,18 +100,21 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
         JPanel list2 = new JPanel();
         list2.setLayout(new GridLayout(recettes.size(),1));
 			
-		recettes.forEach((recette) -> {
+		recettes.forEach((recetteItem) -> {
 			JPanel recettePanel = new JPanel();
 			recettePanel.setLayout(new GridLayout(3,1));
 			
 			JLabel name = new JLabel();
-			name.setText(recette.getNom());
+			name.setText(recetteItem.getNom());
 			recettePanel.add(name);
 			
 			JButton button = new JButton("Detail");
 			button.addActionListener(event -> {
-			new ItemDetails(recette).setVisible(true);				
-			});
+				recetteDetaillee = recetteItem;
+				ingredientPanel.removeAll();
+				ingredientPanel.add(setDetails());
+				revalidate();
+				});
 			recettePanel.add(button);
 			
 			list2.add(recettePanel);
@@ -116,6 +124,11 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
         
         rightPanel.add(scroll2);
         mainContainer.add(rightPanel);
+        
+        
+       // Affiche détails d'une recette
+        ingredientPanel = setDetails();
+        mainContainer.add(ingredientPanel, BorderLayout.EAST);
 		
 	}
 	
@@ -133,6 +146,38 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 		}
 		
 		recettes = RecetteSingleton.getInstance().getListRecette();
+	}
+	
+	private JPanel setDetails() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(2,1));
+
+        if(recetteDetaillee != null) {
+        	
+    		JLabel nomRecette = new JLabel(recetteDetaillee.getNom());
+    		panel.add(nomRecette);
+    		
+			JPanel itemList = new JPanel();
+			itemList.setLayout(new GridLayout(recetteDetaillee.getIngredients().size(),1));
+			
+			for(Ingredient ingredient : recetteDetaillee.getIngredients()) {
+				
+				JPanel ingredientItemPanel = new JPanel();
+				ingredientItemPanel.setLayout(new GridLayout(3,1));
+				
+				JLabel nom = new JLabel(ingredient.getNom());
+				ingredientItemPanel.add(nom);
+				
+				JLabel calories = new JLabel("nombre de calorie dans une quantité de " 
+									+ ingredient.getNom() + " : " + ingredient.getCalorie());
+				ingredientItemPanel.add(calories);
+				
+				itemList.add(ingredientItemPanel);
+				}
+			JScrollPane scroll = new JScrollPane(itemList);
+			panel.add(scroll);
+        }
+        return panel;
 	}
 	
 }
