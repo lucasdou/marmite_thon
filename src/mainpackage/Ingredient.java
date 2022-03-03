@@ -1,15 +1,16 @@
 package mainpackage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Ingredient {
 
 	String nom;
 	Integer calorie;
-	ArrayList listeType;
-	ArrayList listeGeo;
+	List<String> listeType;
+	List<String> listeGeo;
 	
-	public Ingredient(String nom, Integer calorie, ArrayList listeType, ArrayList listeGeo) {
+	public Ingredient(String nom, Integer calorie, List<String> listeType, List<String> listeGeo) {
 		super();
 		this.nom = nom;
 		this.calorie = calorie;
@@ -28,16 +29,16 @@ public class Ingredient {
 	public void setCalorie(Integer calorie) {
 		this.calorie = calorie;
 	}
-	public ArrayList getListeType() {
+	public List<String> getListeType() {
 		return listeType;
 	}
-	public void setListeType(ArrayList listeType) {
+	public void setListeType(List<String> listeType) {
 		this.listeType = listeType;
 	}
-	public ArrayList getListeGeo() {
+	public List<String> getListeGeo() {
 		return listeGeo;
 	}
-	public void setListeGeo(ArrayList listeGeo) {
+	public void setListeGeo(List<String> listeGeo) {
 		this.listeGeo = listeGeo;
 	}
 	

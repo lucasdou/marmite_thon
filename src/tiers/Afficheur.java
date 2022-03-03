@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,37 +16,24 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import IHM.ItemDetails;
-import IHM.ItemsList;
-import IHM.SideMenu;
 
 import interfaces.IAfficheur;
-import mainpackage.Ingredient;
+import interfaces.IMakeItVegan;
 import mainpackage.Recette;
 import pluginloader.Plugin;
 import pluginloader.PluginLoader;
 
 public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	
-	private List<String> availablePlugInList;
+	private List<Plugin> availablePlugInList;
 	private HashMap<String, Plugin> pluginNoAutoRun;
 	private List<Recette> recettes;
-		
-	private List<String> ingredientList;
-	private List<Ingredient> ingredientsSalade;
 	
 	private HashMap<String, JButton> JButtonPlugInList;
 
 	JPanel leftPanel;
 	JPanel rightPanel;
 	JPanel buttonPluginListPanel;
-
-	public JPanel getLeftPanel() {
-		return leftPanel;
-	}
-
-	public void setLeftPanel(JPanel leftPanel) {
-		this.leftPanel = leftPanel;
-	}
 
 	@Override
 	public void run() {
@@ -80,17 +64,20 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 		buttonPluginListPanel.setLayout(new GridLayout(0,1,2,2));
 
 		// On génere les bouttons à partir d'une liste de plugIns
-		availablePlugInList.forEach((plugIn) -> {
-				JButton button = new JButton(plugIn);
+		availablePlugInList.forEach((plugin) -> {
+				JButton button = new JButton(plugin.getName());
 				button.setBackground(Color.RED); //set à désactivé
 				button.addActionListener(event -> {
 					if(button.getBackground().equals(Color.GREEN)) {
-						JButtonPlugInList.get(plugIn).setBackground(Color.RED);
+						JButtonPlugInList.get(plugin.getName()).setBackground(Color.RED);
 					} else {
-						JButtonPlugInList.get(plugIn).setBackground(Color.GREEN);//set à activé
+						Thread t = new Thread ((Runnable) PluginLoader.loadPlugin(plugin));
+						t.start();
+						mainContainer.repaint();
+						JButtonPlugInList.get(plugin.getName()).setBackground(Color.GREEN);//set à activé		
 					}
 				});
-				JButtonPlugInList.put(plugIn, button);
+				JButtonPlugInList.put(plugin.getName(), button);
 				buttonPluginListPanel.add(button);
 				}
 			);
@@ -99,33 +86,14 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 		mainContainer.add(leftPanel, BorderLayout.WEST);
 
 		
-		// Liste des ingrédients
-		
+		//Affichage de la liste des recettes
 		
 		rightPanel = new JPanel();
 
 		rightPanel.setLayout(new BorderLayout());
         		
         JPanel list2 = new JPanel();
-        list2.setLayout(new GridLayout(ingredientList.size(),1));
-
-				
-		ingredientList.forEach((ingredient) -> {
-		JPanel ingredientPanel = new JPanel();
-		ingredientPanel.setLayout(new GridLayout(3,1));
-		
-		JLabel name = new JLabel();
-		name.setText(ingredient);
-		ingredientPanel.add(name);
-		
-		JButton button = new JButton("Detail");
-		button.addActionListener(event -> {
-			new ItemDetails(ingredient).setVisible(true);
-		});
-		ingredientPanel.add(button);
-		list2.add(ingredientPanel);
-		}
-		);
+        list2.setLayout(new GridLayout(recettes.size(),1));
 			
 		recettes.forEach((recette) -> {
 			JPanel recettePanel = new JPanel();
@@ -137,9 +105,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 			
 			JButton button = new JButton("Detail");
 			button.addActionListener(event -> {
-				for(Ingredient i : recette.getIngredients()) {
-					new ItemDetails(i.getNom()).setVisible(true);
-				}				
+			new ItemDetails(recette).setVisible(true);				
 			});
 			recettePanel.add(button);
 			
@@ -158,27 +124,15 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	 * 
 	 */
 	private void setData() {
-		availablePlugInList = new ArrayList<String>();
+		availablePlugInList = new ArrayList<>();
 		recettes = new ArrayList<>();
 		pluginNoAutoRun = PluginLoader.getPluginsNoAutoRun();
-		ingredientsSalade = new ArrayList<>();
-		ingredientsSalade.add(new Ingredient("Poulet",100,null, null));
-		
 		
 		for(Plugin p : pluginNoAutoRun.values()) {
-			availablePlugInList.add(p.getName());
+			availablePlugInList.add(p);
 		}
-			
-		ingredientList = new ArrayList<String>();
-		ingredientList.add("Tomate");
-		ingredientList.add("Patate");
-		ingredientList.add("Poulet");
 		
-		recettes.add(new Recette("Salade de poulet",ingredientsSalade));
+		recettes = RecetteSingleton.getInstance().getListRecette();
 	}
 	
-	
-	private void clickOnPlugin(ActionEvent e) {
-		
-	}
 }

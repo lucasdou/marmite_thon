@@ -4,11 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 
 
@@ -99,6 +96,7 @@ public class PluginLoader {
 				e.printStackTrace();
 			}
 			PluginLoader.getInstance().getPlugins().get(plugin.getName()).setLoaded(true);
+			System.out.println("Le plugin "+ plugin.getName() + " est chargé");
 			return p;
 	}
 	
@@ -111,6 +109,7 @@ public class PluginLoader {
 				try {
 					Thread t = new Thread ((Runnable) PluginLoader.loadPlugin(p));
 					t.start();
+					System.out.println("Le plugin " + p.getName() + " est lancé en AutoRun");;
 				} catch( SecurityException | IllegalArgumentException e) {
 					e.printStackTrace();
 				}
