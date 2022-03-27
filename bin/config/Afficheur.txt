@@ -1,0 +1,6 @@
+name = Afficheur
+interface = interfaces.IAfficheur
+classe = tiers.Afficheur
+description = Plugin d'affichage des donnees
+autorun = true
+dependencies = 
