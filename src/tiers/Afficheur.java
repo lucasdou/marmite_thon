@@ -228,13 +228,13 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
       
         filterButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) { 
-              String résulat = "";
+              String resulat = "";
               if (FiltresAppliquables.getSelectedIndex() != -1) {                     
-            	  résulat = "Filtre appliqué: " 
+            	  resulat = "Filtre applique: " 
                     + FiltresAppliquables.getItemAt
                     (FiltresAppliquables.getSelectedIndex());             
               }
-              System.out.println(résulat);
+              System.out.println(resulat);
               recettes = filtre.filterRecettes(recettes, FiltresAppliquables.getItemAt(FiltresAppliquables.getSelectedIndex()).toString());
               setRightPanel();
               setDetailPanel();
