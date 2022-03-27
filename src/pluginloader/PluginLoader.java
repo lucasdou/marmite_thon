@@ -12,8 +12,6 @@ import java.util.Properties;
 
 import tiers.Monitor;
 
-
-
 public class PluginLoader {
 
 	private static HashMap<String, Plugin> plugins;	
@@ -126,7 +124,6 @@ public class PluginLoader {
 				PluginLoader.getInstance().getPlugins().get(plugin.getName()).setLoaded(true);
 				System.out.println("Le plugin "+ plugin.getName() + " est chargé");
 				if(!plugin.getName().contentEquals("Monitor")) {
-					
 					Monitor.updateMonitor(plugin.getName(), "chargé");
 				}
 				return p;
@@ -151,28 +148,6 @@ public class PluginLoader {
 		}		
 	}
 	
-	/**
-	 * Méthode qui renvoie un objet lié à un plugin
-	 * @param p plugin qui a déjà le paramètre loaded à true
-	 * @return
-	 */
-	public static Object getPluginLoaded(Plugin p) {
-		Class<?> classe = null;
-		Object plugin = null;
-		try {
-			classe = Class.forName(p.getClasse());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			plugin = classe.getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
-		return plugin;
-	}
-
 	/**
 	 * Vérifie les plugins qui sont configurés comme autorun et les charge si c'est le cas
 	 */

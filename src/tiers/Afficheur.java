@@ -42,7 +42,6 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	private JPanel rightPanel;
 	private JPanel buttonPluginListPanel;
 	private JPanel ingredientPanel;
-	private JPanel detailPanel;
 	private JPanel topPanel;
 	private Container mainContainer;
 	
@@ -159,10 +158,6 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 			
 			JButton button = new JButton("Detail");
 			button.addActionListener(event -> {
-				//setDetails(recetteItem);
-				if(this.detail == null) {
-					this.detail = (IDetails) PluginLoader.loadPlugin(PluginLoader.getInstance().getPlugins().get("Detail d'une recette par défaut"));
-				}
 				ingredientPanel.removeAll();
 				ingredientPanel.add(this.detail.detailPanel(recetteItem));
 				ingredientPanel.revalidate();
@@ -180,7 +175,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	}
 	
 	/**
-	 * Méthode servant à initialiser les données de l'application
+	 * Méthode servant à charger les plugins par défaut, la liste liste des plugins utilisables et les recettes affichées par défaut à l'écran
 	 * 
 	 */
 	private void setData() {
@@ -191,48 +186,17 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 			if(!p.getName().contains("Monitor")) {
 				availablePlugInList.add(p); 
 			}			
-			if(p.isLoaded() && p.getName().contentEquals("Recettes par defaut")) {
-				donnees = (IDonnees) PluginLoader.getPluginLoaded(p);
+			if(p.getName().contentEquals("Recettes par defaut")) {
+				donnees = (IDonnees) PluginLoader.loadPlugin(p);
 			}
-			if(p.isLoaded() && p.getName().contentEquals("Filtre par type de recette")) {
-				filtre = (IFiltre) PluginLoader.getPluginLoaded(p);
+			if(p.getName().contentEquals("Filtre par type de recette")) {
+				filtre = (IFiltre) PluginLoader.loadPlugin(p);
+			}
+			if(p.getName().contentEquals("Detail d'une recette par defaut")) {
+				this.detail = (IDetails) PluginLoader.loadPlugin(p);
 			}
 		}
 		recettes = donnees.getDonnees();	
-	}
-	
-	/**
-	 * Méthode permettant d'afficher les données détaillées des recettes
-	 */
-	private void setDetails(Recette recette) {
-		detailPanel = new JPanel();
-		detailPanel.setLayout(new GridLayout(2,1));
-
-        if(recette != null) {
-        	
-    		JLabel nomRecette = new JLabel(recette.getNom());
-    		detailPanel.add(nomRecette);
-    		
-			JPanel itemList = new JPanel();
-			itemList.setLayout(new GridLayout(recette.getIngredients().size(),1));
-			
-			for(Ingredient ingredient : recette.getIngredients()) {
-				
-				JPanel ingredientItemPanel = new JPanel();
-				ingredientItemPanel.setLayout(new GridLayout(3,1));
-				
-				JLabel nom = new JLabel(ingredient.getNom());
-				ingredientItemPanel.add(nom);
-				
-				JLabel calories = new JLabel("nombre de calorie dans 100g de " 
-									+ ingredient.getNom() + " : " + ingredient.getCalorie());
-				ingredientItemPanel.add(calories);
-				
-				itemList.add(ingredientItemPanel);
-				}
-			JScrollPane scroll = new JScrollPane(itemList);
-			detailPanel.add(scroll);
-        }
 	}
 	
 	/**

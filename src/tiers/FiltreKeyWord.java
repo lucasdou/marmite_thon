@@ -29,6 +29,7 @@ public class FiltreKeyWord implements IFiltre {
 		listeFiltreKeyWords.add("Burger");
 		listeFiltreKeyWords.add("Plat chaud");
 		listeFiltreKeyWords.add("Plat froid");
+		listeFiltreKeyWords.add("Pizza");
 		return listeFiltreKeyWords;
 	}
 
