@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +54,7 @@ public class PluginLoader {
 	}
 	
 	/**
-	 * méthode pour parser les fichiers de config des plugins
-	 * 
+	 * Méthode pour parser les fichiers de config des plugins
 	 * 
 	 * @throws IOException 
 	 */
@@ -64,16 +65,19 @@ public class PluginLoader {
 		for(File f : files) {
 			Properties property = new Properties();
 			FileReader file = null;
+			
 			try {
 				file = new FileReader(f);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
+			
 			try {
 				property.load(file);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
 			Plugin plugin = new Plugin(property.getProperty("name"), property.getProperty("interface"), property.getProperty("classe"),
 					property.getProperty("description"), property.getProperty("autorun"), dependenciesToList(property.getProperty("dependencies")));
 			
@@ -82,7 +86,7 @@ public class PluginLoader {
 	}
 
 	/**
-	 * Méthode pour convertir les dépendances des fichiers de config en une liste de string pour pouvoir les lire
+	 * Méthode pour convertir les dépendances des fichiers de config en une liste de strings pour pouvoir les lire
 	 * @param dependencies
 	 * @return
 	 */
@@ -90,8 +94,7 @@ public class PluginLoader {
 		List<String> dependenciesList = new ArrayList<String>();
 		if(!dependencies.isEmpty()) {
 			String[] dependanciesArray = dependencies.split("\\;");
-			for(String dependency : dependanciesArray)
-			{
+			for(String dependency : dependanciesArray) {
 				dependenciesList.add(dependency);
 			}
 		}
@@ -108,27 +111,30 @@ public class PluginLoader {
 	public static Object loadPlugin(Plugin plugin) {
 			Class<?> classe = null;
 			Object p = null;
+			
 			try {
 				classe = Class.forName(plugin.getClasse());
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+			
 			try {
 				p = classe.getDeclaredConstructor().newInstance();
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
 			}
+			
 			if(!plugin.isLoaded()) {
 				verifPluginLoaded(plugin);
 				PluginLoader.getInstance().getPlugins().get(plugin.getName()).setLoaded(true);
-				System.out.println("Le plugin "+ plugin.getName() + " est chargé");
+				System.out.println("Le plugin " + plugin.getName() + " est chargé");
 				if(!plugin.getName().contentEquals("Monitor")) {
 					Monitor.updateMonitor(plugin.getName(), "chargé");
 				}
 				return p;
 			} else {
-				System.out.println("Le plugin "+ plugin.getName() + " est déjà chargé");
+				System.out.println("Le plugin " + plugin.getName() + " est déjà chargé");
 				return null;
 			}			
 	}
@@ -153,8 +159,10 @@ public class PluginLoader {
 	 */
 	private void autoRun() {
 		loadMonitor();
+		
 		for(Plugin p : plugins.values()) {
 			if(p.getAutoRun().contentEquals("true") && !p.getName().contentEquals("Monitor")) {
+				
 				try {
 					if(!PluginLoader.getInstance().getPlugins().get(p.getName()).getDependency().isEmpty()) {
 						PluginLoader.getInstance().getPlugins().get(p.getName()).getDependency().forEach(d -> {

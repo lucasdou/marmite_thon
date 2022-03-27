@@ -2,8 +2,6 @@ package interfaces;
 
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import mainpackage.Recette;
 
 public interface IFiltre {

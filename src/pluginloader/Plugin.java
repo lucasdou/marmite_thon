@@ -13,7 +13,6 @@ public class Plugin {
 	boolean loaded;
 	
 	public Plugin(String name, String interf, String classe, String description, String autoRun, List<String> dependencies) {
-		super();
 		this.name = name;
 		this.interf = interf;
 		this.classe = classe;

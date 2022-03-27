@@ -17,7 +17,6 @@ public class DetailDefault implements IDetails {
 		JPanel detailPanel = new JPanel();
 		detailPanel.setLayout(new GridLayout(2,1));
 
-        	
     	JLabel nomRecette = new JLabel(r.getNom());
     	detailPanel.add(nomRecette);
     		
@@ -25,7 +24,6 @@ public class DetailDefault implements IDetails {
 		itemList.setLayout(new GridLayout(r.getIngredients().size(),1));
 			
 		for(Ingredient ingredient : r.getIngredients()) {
-				
 			JPanel ingredientItemPanel = new JPanel();
 			ingredientItemPanel.setLayout(new GridLayout(3,1));
 				

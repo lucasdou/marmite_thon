@@ -15,18 +15,19 @@ public class FiltreTypeRecette implements IFiltre{
 	
 	@Override
 	public List<String> listFiltres() {
-		List<String> listeFiltreTypeRecette =  new ArrayList<String>();
+		List<String> listeFiltreTypeRecette = new ArrayList<String>();
+		
 		listeFiltreTypeRecette.add("Entrée");
 		listeFiltreTypeRecette.add("Plat");
 		listeFiltreTypeRecette.add("Dessert");
+		
 		return listeFiltreTypeRecette;
 	}
 
 	@Override
 	public List<Recette> filterRecettes(List<Recette> recettes, String filter) {
 		List<Recette> recettesFilter = new ArrayList<>();
-		recettesFilter = recettes.stream().filter(r -> 
-		r.getType().contentEquals(filter)).collect(Collectors.toList());
+		recettesFilter = recettes.stream().filter(r -> r.getType().contentEquals(filter)).collect(Collectors.toList());
 		return recettesFilter;
 	}
 }

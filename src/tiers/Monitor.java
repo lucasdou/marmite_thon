@@ -50,6 +50,7 @@ public class Monitor extends JFrame implements Runnable {
 		table = new JTable(dtm);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setMinimumSize(new Dimension(200,150));
+        
 		add(labelList);
 		add(scrollPane);
 		add(historic);
@@ -57,8 +58,10 @@ public class Monitor extends JFrame implements Runnable {
 	
 	public static void updateMonitor(String plugin, String status) {
 		plugins.put(plugin, status);
+		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM : hh:mm:ss");
 		LocalDateTime time = LocalDateTime.now();
+		
 		addMonitorLine(time.format(formatter),plugin, status);
 		refreshMonitor();	
 		mainContainer.validate();
@@ -72,20 +75,20 @@ public class Monitor extends JFrame implements Runnable {
 		
 		int i = 0;
 		while(entriesIterator.hasNext()){
-
 		    Map.Entry mapping = (Map.Entry) entriesIterator.next();
 
 		    arr[i][0] = mapping.getKey();
 		    arr[i][1] = mapping.getValue();
 		    i++;
 		}
+		
 		String[] entetes = {"Plugin","Status"};
 		dtm.setDataVector(arr, entetes);
 		
 	}
 
 	private static void addMonitorLine(String time, String name, String status) {
-		String newLine = time + " : Le plugin : "+ name + " est " + status;
+		String newLine = time + " : Le plugin : " + name + " est " + status;
 		dlm.addElement(newLine);	
 	}
 }

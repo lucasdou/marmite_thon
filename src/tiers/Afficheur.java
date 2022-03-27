@@ -22,20 +22,19 @@ import interfaces.IAfficheur;
 import interfaces.IDetails;
 import interfaces.IDonnees;
 import interfaces.IFiltre;
-import mainpackage.Ingredient;
 import mainpackage.Recette;
 import pluginloader.Plugin;
 import pluginloader.PluginLoader;
 
 /**
- * Plugin permettant d'afficher le menu de l'application
+ * Plugin permettant d'afficher l'interface de l'application
  *
  */
 public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	
-	private List<Plugin> availablePlugInList; //Liste des plugins utilisables
-	private List<Recette> recettes;//Liste contenant les données des recettes de l'application
-	private HashMap<String, JButton> JButtonPlugInList; //Map des boutons permettant d'interagir avec les plugins
+	private List<Plugin> availablePlugInList; // Liste des plugins utilisables
+	private List<Recette> recettes; // Liste contenant les données des recettes de l'application
+	private HashMap<String, JButton> JButtonPlugInList; // Map des boutons permettant d'interagir avec les plugins
 	
 	// L'ensemble des variables permettant de construire l'IHM
 	private JPanel leftPanel;
@@ -90,6 +89,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 				JButton button = new JButton(plugin.getName());
 				// Chaque bouton correspondant à un plugin permet de charger le plugin correspondant
 				button.addActionListener(event -> {
+					
 					if(plugin.getInterf().contentEquals("interfaces.IDonnees")) {
 						this.donnees = (IDonnees) PluginLoader.loadPlugin(plugin);
 						if(donnees != null) {
@@ -97,7 +97,8 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 							setRightPanel();
 							setDetailPanel();
 						}						
-					}					
+					}
+					
 					if(plugin.getInterf().contentEquals("interfaces.IFiltre")) {
 						filtre = (IFiltre) PluginLoader.loadPlugin(plugin);
 						if(filtre != null) {
@@ -105,6 +106,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 							setDetailPanel();
 						}
 					}
+					
 					if(plugin.getInterf().contentEquals("interfaces.IDetails")) {
 						this.detail = (IDetails) PluginLoader.loadPlugin(plugin);
 						if(detail != null) {
@@ -129,6 +131,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 			mainContainer.remove(ingredientPanel);
 			mainContainer.validate();
 		}
+		
 		ingredientPanel = new JPanel();
         mainContainer.add(ingredientPanel, BorderLayout.EAST);
         mainContainer.validate();	
@@ -142,6 +145,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 			mainContainer.remove(rightPanel);
 			mainContainer.validate();
 		}
+		
 		rightPanel = new JPanel();
 		rightPanel.setLayout(new BorderLayout());
         		
@@ -185,16 +189,19 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 		for(Plugin p : PluginLoader.getPluginsForUser().values()) {
 			if(!p.getName().contains("Monitor")) {
 				availablePlugInList.add(p); 
-			}			
+			}
+			
 			if(p.getName().contentEquals("Recettes par defaut")) {
 				donnees = (IDonnees) PluginLoader.loadPlugin(p);
 			}
-			if(p.getName().contentEquals("Filtre par type de recette")) {
+			
+			else if(p.getName().contentEquals("Filtre par type de recette")) {
 				filtre = (IFiltre) PluginLoader.loadPlugin(p);
 			}
-			if(p.getName().contentEquals("Detail d'une recette par defaut")) {
+			
+			else if(p.getName().contentEquals("Detail d'une recette par defaut")) {
 				this.detail = (IDetails) PluginLoader.loadPlugin(p);
-			}
+			}			
 		}
 		recettes = donnees.getDonnees();	
 	}
@@ -203,7 +210,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	 * Méthode qui initialise la partie filtre de l'IHM
 	 */
 	private void setFiltrePanel() {
-		if(topPanel !=null) {
+		if(topPanel != null) {
 			mainContainer.remove(topPanel);
 			mainContainer.validate();
 		}
@@ -234,6 +241,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
               recettes = donnees.getDonnees();
            }
         }); 
+        
         topPanel.add(filterListScrollPane);          
         topPanel.add(filterButton);
         mainContainer.add(topPanel, BorderLayout.NORTH);
