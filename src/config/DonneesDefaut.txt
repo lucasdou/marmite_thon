@@ -1,0 +1,6 @@
+name=Recettes par defaut
+interface = interfaces.IDonnees
+classe = tiers.DonneesDefaut
+description = plugin de generateur de donnees de l application
+autorun = false
+dependencies =

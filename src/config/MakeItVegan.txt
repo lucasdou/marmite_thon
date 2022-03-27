@@ -1,4 +1,0 @@
-name=MakeItVegan
-classe = tiers.MakeItVegan
-description = plugin pour permettre de passer les recettes de base en recette Vegan
-autorun = false

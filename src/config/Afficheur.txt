@@ -1,4 +1,6 @@
 name=Afficheur
+interface = interfaces.IAfficheur
 classe = tiers.Afficheur
 description = plugin d'affichage des donnees
 autorun = true
+dependencies = Recettes par defaut;Filtre par type de recette

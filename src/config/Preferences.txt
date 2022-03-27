@@ -1,4 +1,0 @@
-name=Preferences
-classe = tiers.Preferences
-description = plugin pour permettre à l'utilisateur de filtrer les aliments qu'il n'aime pas
-autorun = false

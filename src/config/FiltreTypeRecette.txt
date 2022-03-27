@@ -1,0 +1,6 @@
+name=Filtre par type de recette
+interface = interfaces.IFiltre
+classe = tiers.FiltreTypeRecette
+description = plugin pour filtrer les recettes sur leur type
+autorun = true
+dependencies = 

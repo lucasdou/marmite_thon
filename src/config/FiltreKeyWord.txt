@@ -1,0 +1,6 @@
+name=Filtre par mots clés
+interface = interfaces.IFiltre
+classe = tiers.FiltreKeyWord
+description = plugin pour filtrer les recettes sur leurs mots clés
+autorun = false
+dependencies = 

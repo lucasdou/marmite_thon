@@ -1,19 +1,25 @@
 package pluginloader;
 
+import java.util.List;
+
 public class Plugin {
 
 	String name;
+	String interf;
 	String classe;
 	String description;
 	String autoRun;
+	List<String> dependencies;
 	boolean loaded;
 	
-	public Plugin(String name, String classe, String description, String autoRun) {
+	public Plugin(String name, String interf, String classe, String description, String autoRun, List<String> dependencies) {
 		super();
 		this.name = name;
+		this.interf = interf;
 		this.classe = classe;
 		this.description = description;
 		this.autoRun = autoRun;
+		this.dependencies = dependencies;
 	}
 
 	public String getName() {
@@ -22,6 +28,14 @@ public class Plugin {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getInterf() {
+		return interf;
+	}
+
+	public void setInterf(String interf) {
+		this.interf = interf;
 	}
 
 	public String getClasse() {
@@ -47,6 +61,14 @@ public class Plugin {
 	public void setAutoRun(String autoRun) {
 		this.autoRun = autoRun;
 	}
+	
+	public List<String> getDependency() {
+		return dependencies;
+	}
+
+	public void setDependency(List<String> dependencies) {
+		this.dependencies = dependencies;
+	}
 
 	public boolean isLoaded() {
 		return loaded;
@@ -54,13 +76,5 @@ public class Plugin {
 
 	public void setLoaded(boolean loaded) {
 		this.loaded = loaded;
-	}
-
-	@Override
-	public String toString() {
-		return "Plugin [name=" + name + ", classe=" + classe + ", autoRun=" + autoRun + "]";
-	}
-	
-	
-	
+	}	
 }
