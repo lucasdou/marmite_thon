@@ -33,7 +33,7 @@ import pluginloader.PluginLoader;
 public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	
 	private List<Plugin> availablePlugInList; // Liste des plugins utilisables
-	private List<Recette> recettes; // Liste contenant les données des recettes de l'application
+	private List<Recette> recettes; // Liste contenant les donnÃ©es des recettes de l'application
 	private HashMap<String, JButton> JButtonPlugInList; // Map des boutons permettant d'interagir avec les plugins
 	
 	// L'ensemble des variables permettant de construire l'IHM
@@ -44,7 +44,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	private JPanel topPanel;
 	private Container mainContainer;
 	
-	// Variables permettant de récupérer les plugins
+	// Variables permettant de rÃ©cupÃ©rer les plugins
 	private IDonnees donnees;
 	private IFiltre filtre;
 	private IDetails detail;
@@ -55,7 +55,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	}
 
 	/**
-	 * Méthode qui instancie l'IHM
+	 * MÃ©thode qui instancie l'IHM
 	 */
 	private void setIHM() {
 		mainContainer = this.getContentPane();
@@ -72,7 +72,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	}
 	
 	/**
-	 * Méthode servant à mettre en place la partie plugins de l'interface
+	 * MÃ©thode servant Ã  mettre en place la partie plugins de l'interface
 	 */
 	private void setLeftPanel() {		
 		// Liste des Plugins			
@@ -84,14 +84,14 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 		buttonPluginListPanel = new JPanel();
 		buttonPluginListPanel.setLayout(new GridLayout(0,1,2,2));
 
-		// On génere les bouttons à partir d'une liste de plugIns
+		// On gÃ©nere les bouttons Ã  partir d'une liste de plugIns
 		availablePlugInList.forEach((plugin) -> {
 				JButton button = new JButton(plugin.getName());
-				// Chaque bouton correspondant à un plugin permet de charger le plugin correspondant
+				// Chaque bouton correspondant Ã  un plugin permet de charger le plugin correspondant
 				button.addActionListener(event -> {
-					
-					if(plugin.getInterf().contentEquals("interfaces.IDonnees")) {
-						this.donnees = (IDonnees) PluginLoader.loadPlugin(plugin);
+					Object p = PluginLoader.loadPlugin(plugin);
+					if(plugin.getInterf().contentEquals("interfaces.IDonnees") && p != null) {
+						this.donnees = (IDonnees) p;
 						if(donnees != null) {
 							recettes = this.donnees.getDonnees();
 							setRightPanel();
@@ -99,16 +99,16 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 						}						
 					}
 					
-					if(plugin.getInterf().contentEquals("interfaces.IFiltre")) {
-						filtre = (IFiltre) PluginLoader.loadPlugin(plugin);
+					if(plugin.getInterf().contentEquals("interfaces.IFiltre") && p!= null) {
+						filtre = (IFiltre) p;
 						if(filtre != null) {
 							setFiltrePanel();
 							setDetailPanel();
 						}
 					}
 					
-					if(plugin.getInterf().contentEquals("interfaces.IDetails")) {
-						this.detail = (IDetails) PluginLoader.loadPlugin(plugin);
+					if(plugin.getInterf().contentEquals("interfaces.IDetails") && p!= null) {
+						this.detail = (IDetails) p;
 						if(detail != null) {
 							setRightPanel();
 							setDetailPanel();
@@ -124,7 +124,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	}
 
 	/**
-	 * Construit la partie "détails de la recette" de l'interface
+	 * Construit la partie "dÃ©tails de la recette" de l'interface
 	 */
 	private void setDetailPanel() {
 		if(ingredientPanel != null) {
@@ -138,7 +138,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	}
 
 	/**
-	 * Définit la partie affichage des recettes de l'interface
+	 * DÃ©finit la partie affichage des recettes de l'interface
 	 */
 	private void setRightPanel() {
 		if(rightPanel != null) {
@@ -179,7 +179,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	}
 	
 	/**
-	 * Méthode servant à charger les plugins par défaut, la liste liste des plugins utilisables et les recettes affichées par défaut à l'écran
+	 * MÃ©thode servant Ã  charger les plugins par dÃ©faut, la liste liste des plugins utilisables et les recettes affichÃ©es par dÃ©faut Ã  l'Ã©cran
 	 * 
 	 */
 	private void setData() {
@@ -207,7 +207,7 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
 	}
 	
 	/**
-	 * Méthode qui initialise la partie filtre de l'IHM
+	 * MÃ©thode qui initialise la partie filtre de l'IHM
 	 */
 	private void setFiltrePanel() {
 		if(topPanel != null) {
@@ -228,13 +228,13 @@ public class Afficheur extends JFrame implements IAfficheur, Runnable {
       
         filterButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) { 
-              String résulat = "";
+              String rÃ©sulat = "";
               if (FiltresAppliquables.getSelectedIndex() != -1) {                     
-            	  résulat = "Filtre appliqué: " 
+            	  rÃ©sulat = "Filtre appliquÃ©: " 
                     + FiltresAppliquables.getItemAt
                     (FiltresAppliquables.getSelectedIndex());             
               }
-              System.out.println(résulat);
+              System.out.println(rÃ©sulat);
               recettes = filtre.filterRecettes(recettes, FiltresAppliquables.getItemAt(FiltresAppliquables.getSelectedIndex()).toString());
               setRightPanel();
               setDetailPanel();
