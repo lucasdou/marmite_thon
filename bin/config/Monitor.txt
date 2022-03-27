@@ -1,6 +1,0 @@
-name = Monitor
-interface = interfaces.IMonitor
-classe = tiers.Monitor
-description = Plugin d'affichage des donnees
-autorun = true
-dependencies = 

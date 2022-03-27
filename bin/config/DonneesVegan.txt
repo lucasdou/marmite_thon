@@ -1,6 +1,0 @@
-name = Recettes Vegan
-interface = interfaces.IDonnees
-classe = tiers.DonneesVegan
-description = Plugin pour permettre de passer les recettes de base en recette Vegan
-autorun = false
-dependencies = Afficheur

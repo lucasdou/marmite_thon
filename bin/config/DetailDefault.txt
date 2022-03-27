@@ -1,6 +1,0 @@
-name = Detail d'une recette par defaut
-interface = interfaces.IDetails
-classe = tiers.DetailDefault
-description = Plugin qui génère la partie détail par défaut d une recette 
-autorun = false
-dependencies = Afficheur
