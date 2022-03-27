@@ -1,3 +1,4 @@
+**.class
+src/.classpath
+src/.project
 /bin/
-*.class
-*.log
