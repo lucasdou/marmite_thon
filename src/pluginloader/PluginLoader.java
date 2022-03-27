@@ -111,32 +111,42 @@ public class PluginLoader {
 	public static Object loadPlugin(Plugin plugin) {
 			Class<?> classe = null;
 			Object p = null;
-			
-			try {
-				classe = Class.forName(plugin.getClasse());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				p = classe.getDeclaredConstructor().newInstance();
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
-			}
+			boolean verif = false;
 			
 			if(!plugin.isLoaded()) {
-				verifPluginLoaded(plugin);
-				PluginLoader.getInstance().getPlugins().get(plugin.getName()).setLoaded(true);
-				System.out.println("Le plugin " + plugin.getName() + " est chargé");
-				if(!plugin.getName().contentEquals("Monitor")) {
-					Monitor.updateMonitor(plugin.getName(), "chargé");
-				}
-				return p;
+				//On vérifie si le plugin a des dépendances ou non
+				if(!PluginLoader.getInstance().getPlugins().get(plugin.getName()).getDependency().isEmpty()) {
+					for(String d: PluginLoader.getInstance().getPlugins().get(plugin.getName()).getDependency()) {
+						if (!PluginLoader.getInstance().getPlugins().get(d).isLoaded()) {
+							Monitor.warningMonitor(d, d);
+							verif = true;
+						}
+					}
+				} 
+				if(!verif) {
+					verifPluginWithSameInterfaceLoaded(plugin);
+					try {
+						classe = Class.forName(plugin.getClasse());
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
+					
+					try {
+						p = classe.getDeclaredConstructor().newInstance();
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+							| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+						e.printStackTrace();
+					}
+					PluginLoader.getInstance().getPlugins().get(plugin.getName()).setLoaded(true);
+					System.out.println("Le plugin " + plugin.getName() + " est chargé");
+					if(!plugin.getName().contentEquals("Monitor")) {
+						Monitor.updateMonitor(plugin.getName(), "chargé");
+					}						
+				}							
 			} else {
 				System.out.println("Le plugin " + plugin.getName() + " est déjà chargé");
-				return null;
-			}			
+			}
+			return p;
 	}
 	
 	/**
@@ -144,7 +154,7 @@ public class PluginLoader {
 	 * qui va être chargé. Si c'est le cas, ce plugin doit passer en état "non chargé" 
 	 * @param p
 	 */
-	private static void verifPluginLoaded(Plugin p) {
+	private static void verifPluginWithSameInterfaceLoaded(Plugin p) {
 		for(Plugin pl : plugins.values()) {
 			if (pl.getInterf().contentEquals(p.getInterf()) && pl.isLoaded() && !pl.getName().contains(p.getName())) {
 				pl.setLoaded(false);
